@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>多个小球碰撞</title>
+		<style type="text/css">
+			#box {
+				width: 1000px;
+				height: 600px;
+				border: 10px solid black;
+				margin: auto;
+				margin-top: 50px;
+				position: relative;
+			}
+
+			.ball {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				background: red;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div id="ball"></div>
+		</div>
+
+		<script type="text/javascript">
+			var box = document.getElementById("box");
+			var ball = document.querySelector("#ball");
+			
+			var leftMax = box.clientWidth - 100;
+			var topMax = box.clientHeight - 100;
+			var leftmove=0;
+			var topmove = 0;
+			
+			function randomNumber(a = 1, b = 10) {
+				// 这两个函数会做个类型转换, 假如含有其他字符,返回的是NaN
+				var max = Math.max(a, b);
+				var min = Math.min(a, b);
+				if (isNaN(max)) throw "参数不规范!";
+				return Math.floor(Math.random() * (max - min + 1) + min);
+			}
+			
+			
+			function creatBall(obj,num){
+				for(var i = 0;i<num;i++){
+					var newball = document.createElement('div');
+					newball.className = "ball";
+					// newball.style.position = "absolute"
+					newball.style.top = randomNumber(0,topMax)+'px';
+					newball.style.left = randomNumber(0,leftMax)+'px';
+					newball.style.width=randomNumber(20,80)+"px";
+					newball.style.height =newball.style.width;
+					newball.leftmove = (i+1)*2;
+					newball.topmove = (i+1)*2;
+					// console.log(newball);
+					bgcBall(newball);
+					obj.appendChild(newball);
+
+				};
+			};
+			
+			var balls="";
+			creatBall(ball,30);
+			balls = ball.children;
+			// console.log(balls);
+			
+			
+			setInterval(function(){	
+				for(var i =0;i<balls.length;i++){
+					var left = balls[i].offsetLeft+balls[i].leftmove;
+					var top = balls[i].offsetTop + balls[i].topmove;
+					// console.log(balls[i].offsetLeft)
+					if(left >=leftMax){
+						left = leftMax;
+						balls[i].leftmove=-balls[i].leftmove;
+					}else if(left<=0){
+						left = 0;
+						balls[i].leftmove=-balls[i].leftmove;
+					};
+					if(top >=topMax){
+						top = topMax;
+						balls[i].topmove=-balls[i].topmove;
+					}else if(top<=0){
+						top = 0;
+						balls[i].topmove=-balls[i].topmove;
+					};
+					balls[i].style.left = left+"px";
+					balls[i].style.top = top+"px";
+				}
+			},50);
+			
+			function bgcBall(obj){
+				var r = randomNumber(0,255);
+					g = randomNumber(0,255);
+					b = randomNumber(0,255);
+				obj.style.backgroundColor = 'rgb('+r+','+g+','+b+')';
+			}
+		</script>
+	</body>
+</html>
